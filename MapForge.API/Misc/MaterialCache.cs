@@ -109,7 +109,7 @@ namespace MapForge.API.Misc
 
             Mesh mesh = filter.sharedMesh;
 
-            UnityEngine.Object.DestroyImmediate(obj);
+            Object.DestroyImmediate(obj);
 
             return mesh;
         }

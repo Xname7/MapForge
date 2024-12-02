@@ -88,7 +88,7 @@ public static class Extensions
         if (ib.PickupDropModel == null)
             return null;
 
-        ItemPickupBase newPickup = UnityEngine.Object.Instantiate(ib.PickupDropModel, position, Quaternion.Euler(rotation), parent);
+        ItemPickupBase newPickup = Object.Instantiate(ib.PickupDropModel, position, Quaternion.Euler(rotation), parent);
         newPickup.transform.localScale = scale;
         newPickup.Info = new PickupSyncInfo(type, ib.Weight);
 
@@ -107,7 +107,7 @@ public static class Extensions
     /// <returns>New instance.</returns>
     public static T CreateNewInstance<T>(this T instance, Vector3 position, Vector3 rotation, Vector3 scale, Transform parent) where T : NetworkBehaviour
     {
-        T newInstance = UnityEngine.Object.Instantiate(instance, position, Quaternion.Euler(rotation));
+        T newInstance = Object.Instantiate(instance, position, Quaternion.Euler(rotation));
         newInstance.transform.localScale = scale;
 
         return newInstance;

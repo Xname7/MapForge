@@ -55,7 +55,7 @@ namespace MapForge.API
             primitive.PrimitiveType = primitiveType;
             primitive.ObjectFilter.sharedMesh = MaterialCache.GetMeshFromCache(primitiveType);
 
-            UnityEngine.Object.DestroyImmediate(primitive.ObjectCollider);
+            Object.DestroyImmediate(primitive.ObjectCollider);
 
             if (primitiveType == SpawnablePrimitiveType.Cube)
                 primitive.ObjectCollider = primitive.GetComponentOrCreate<BoxCollider>();
