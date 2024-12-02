@@ -1,12 +1,11 @@
-﻿using InventorySystem.Items;
+﻿using AdminToys;
+using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
+using InventorySystem.Items;
 using InventorySystem.Items.Pickups;
 using MapForge.API.Enums;
-using UnityEngine;
-using Interactables.Interobjects.DoorUtils;
-using AdminToys;
 using Mirror;
-using System;
+using UnityEngine;
 
 /// <summary>
 /// Extensions for MapForge.
@@ -69,7 +68,7 @@ public static class Extensions
     /// <returns>Primitive flags.</returns>
     public static PrimitiveFlags ToPrimitiveFlags(this PrimitiveExtraFlags flags)
     {
-        return (PrimitiveFlags) flags;
+        return (PrimitiveFlags)flags;
     }
 
     /// <summary>

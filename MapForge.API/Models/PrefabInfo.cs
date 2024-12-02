@@ -96,7 +96,7 @@ namespace MapForge.API.Models
 
             Object.transform.localScale = Scale;
 
-            foreach(SpawnableInfo spawnable in Object.GetComponentsInChildren<SpawnableInfo>())
+            foreach (SpawnableInfo spawnable in Object.GetComponentsInChildren<SpawnableInfo>())
             {
                 spawnable.Spawn(this);
             }
@@ -129,7 +129,7 @@ namespace MapForge.API.Models
                 return false;
             }
 
-            foreach(GameObject subObject in SubObjects)
+            foreach (GameObject subObject in SubObjects)
             {
                 if (subObject == null)
                     continue;

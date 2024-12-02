@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-using CommandSystem;
+﻿using CommandSystem;
 using MapForge.API;
 using MapForge.API.Models;
+using System;
+using System.Text;
 
 namespace MapForge.Commands.MapForge
 {

@@ -65,7 +65,7 @@ namespace MapForge.API.Models
 
         int GetFreeId()
         {
-            for(int x = 0; x < int.MaxValue; x++)
+            for (int x = 0; x < int.MaxValue; x++)
             {
                 if (!PrefabInstances.ContainsKey(x))
                     return x;
@@ -80,7 +80,7 @@ namespace MapForge.API.Models
         /// </summary>
         public void Reload()
         {
-            foreach(PrefabInfo prefab in PrefabInstances.Values)
+            foreach (PrefabInfo prefab in PrefabInstances.Values)
             {
                 prefab.DeSpawn();
             }

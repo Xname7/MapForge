@@ -1,6 +1,6 @@
 ﻿using CommandSystem;
-using MapForge.API.Models;
 using MapForge.API;
+using MapForge.API.Models;
 using System;
 
 namespace MapForge.Commands.MapForge
@@ -22,7 +22,7 @@ namespace MapForge.Commands.MapForge
             }
 
             string bundleName = arguments.At(0);
-            
+
             if (!int.TryParse(arguments.At(1), out int prefabId))
             {
                 response = $"Failed parsing prefab id from \"{arguments.At(1)}\"";

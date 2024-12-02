@@ -1,6 +1,6 @@
 ﻿using CommandSystem;
-using MapForge.API.Models;
 using MapForge.API;
+using MapForge.API.Models;
 using System;
 
 namespace MapForge.Commands.MapForge

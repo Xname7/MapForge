@@ -1,6 +1,6 @@
 ﻿using CommandSystem;
-using MapForge.API.Models;
 using MapForge.API;
+using MapForge.API.Models;
 using System;
 using System.Text;
 
@@ -31,7 +31,7 @@ namespace MapForge.Commands.MapForge
             }
 
             StringBuilder sb = new StringBuilder();
-            
+
             if (bundle.PrefabInstances.Count == 0)
             {
                 sb.AppendLine($"Theres no spawned prefabs for bundle \"{bundleName}\"");

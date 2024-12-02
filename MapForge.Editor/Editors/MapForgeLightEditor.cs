@@ -1,10 +1,4 @@
-﻿using MapForge.API.Enums;
-using MapForge.API.Spawnables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MapForge.API.Spawnables;
 using UnityEditor;
 using UnityEngine;
 

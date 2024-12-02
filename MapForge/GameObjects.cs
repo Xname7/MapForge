@@ -9,7 +9,6 @@ using MapForge.API.Spawnables;
 using MapGeneration.Distributors;
 using Mirror;
 using UnityEngine;
-using static PlayerList;
 
 namespace MapForge
 {
@@ -79,7 +78,7 @@ namespace MapForge
         public override void Initialize()
         {
             base.Initialize();
-            foreach(var spawnable in NetworkClient.prefabs.Values)
+            foreach (var spawnable in NetworkClient.prefabs.Values)
             {
                 if (spawnable.TryGetComponent(out AdminToyBase toy))
                 {
@@ -196,7 +195,7 @@ namespace MapForge
                     break;
                 case MapForgePickup pickup:
                     ItemType item = pickup.Item.ToItemType();
-                    
+
                     ItemPickupBase pickupInstance = item.ToPickup(pickup.Position, pickup.Rotation, pickup.Scale, info.transform);
                     info.SpawnedBy.SubObjects.Add(pickupInstance.gameObject);
 

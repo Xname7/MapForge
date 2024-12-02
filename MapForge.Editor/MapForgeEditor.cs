@@ -28,7 +28,7 @@ namespace MapForge.API
             {
                 string assetPath = assetPaths[x];
 
-                MapForgeLog.Info($"Stripping down prefab <color=orange>{assetPath}</color> <color=orange>{x+1}</color>/<color=orange>{assetPaths.Length}</color>");
+                MapForgeLog.Info($"Stripping down prefab <color=orange>{assetPath}</color> <color=orange>{x + 1}</color>/<color=orange>{assetPaths.Length}</color>");
 
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
 
