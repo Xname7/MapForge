@@ -10,10 +10,20 @@ namespace MapForge.API.Editors
         [MenuItem("GameObject/Map Forge/Create Prefab", false, 1)]
         private static void OnCreatePrefab()
         {
-            GameObject prefabGo = new GameObject("Prefab");
+            GameObject activeObject = Selection.activeGameObject;
+            GameObject prefabGo = new("Prefab");
+
+            if (activeObject != null)
+            {
+                prefabGo.transform.parent = activeObject.transform;
+                prefabGo.transform.localPosition = Vector3.zero;
+                prefabGo.transform.localRotation = Quaternion.identity;
+                prefabGo.transform.localScale = Vector3.one;
+            }
+
             MapForgePrefab bundle = prefabGo.AddComponent<MapForgePrefab>();
 
-            string bundlePath = $"Assets/Prefabs/Prefab.prefab";
+            string bundlePath = $"Assets/_Prefabs/Prefab.prefab";
 
             bundlePath.CreateDirectoryFromAssetPath();
 
@@ -25,7 +35,6 @@ namespace MapForge.API.Editors
 
         [MenuItem("GameObject/Map Forge/Spawnables/Light", false, 1)]
         private static void OnCreateLight() => EditorExtensions.GetBundle()?.AddLight(Selection.activeTransform, SpawnableLightType.Point);
-
 
         [MenuItem("GameObject/Map Forge/Spawnables/Primitives/Quad")]
         private static void OnCreateQuadPrimitive() => EditorExtensions.GetBundle()?.AddPrimitive(Selection.activeTransform, SpawnablePrimitiveType.Quad);
