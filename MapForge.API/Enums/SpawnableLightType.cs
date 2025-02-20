@@ -3,5 +3,7 @@
     public enum SpawnableLightType : byte
     {
         Point,
+        Spot,
+        Directional,
     }
 }

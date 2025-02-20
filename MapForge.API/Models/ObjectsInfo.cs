@@ -1,4 +1,7 @@
-﻿namespace MapForge.API.Models
+using UnityEngine;
+
+namespace MapForge.API.Models
+
 {
     public class ObjectsInfo
     {
@@ -12,9 +15,14 @@
             IsInitialized = true;
         }
 
-        public virtual void OnSpawnObject(SpawnableInfo info)
+        public virtual void SpawnObject(GameObject go, int dimensionId)
         {
 
+        }
+
+        public virtual GameObject OnSpawnObject(SpawnableInfo info)
+        {
+            return null;
         }
     }
 }

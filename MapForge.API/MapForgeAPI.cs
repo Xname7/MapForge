@@ -104,7 +104,8 @@ namespace MapForge.API
                         info.Unload();
                         break;
                     case FileActionType.Changed:
-                        info.Reload();
+                        if (!info.Reload())
+                            _fileActions.Enqueue(action);
                         break;
                 }
             }

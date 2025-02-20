@@ -1,4 +1,4 @@
-﻿using AdminToys;
+using AdminToys;
 using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Pickups;
@@ -7,8 +7,11 @@ using MapForge.API.Enums;
 using MapForge.API.Models;
 using MapForge.API.Spawnables;
 using MapGeneration.Distributors;
+using MapGeneration.RoomConnectors;
 using Mirror;
 using UnityEngine;
+using static InventorySystem.Items.Firearms.Modules.CylinderAmmoModule;
+using static PlayerList;
 
 namespace MapForge
 {
@@ -35,6 +38,25 @@ namespace MapForge
         public BreakableDoor LczDoor;
         public BreakableDoor HczDoor;
         public BreakableDoor EzDoor;
+        public BreakableDoor BulkDoor;
+
+        public GameObject GetAssetFromType(SpawnableAssetType type)
+        {
+            switch (type)
+            {
+                case SpawnableAssetType.Workstation:
+                    return Workstation;
+
+                default:
+                    foreach(SpawnableRoomConnector connector in RoomConnectorDistributorSettings.RegisteredConnectors)
+                    {
+                        if (connector.SpawnData.ConnectorType == SpawnableRoomConnectorType.HczBulkDoor)
+                            return connector.gameObject;
+                    }
+
+                    return Workstation;
+            }
+        }
 
         public BreakableDoor GetDoorFromType(SpawnableDoorType type)
         {
@@ -45,6 +67,9 @@ namespace MapForge
 
                 case SpawnableDoorType.Entrance:
                     return EzDoor;
+
+                case SpawnableDoorType.BulkDoor:
+                    return BulkDoor;
 
                 default:
                     return LczDoor;
@@ -73,6 +98,15 @@ namespace MapForge
                 default:
                     return Locker;
             }
+        }
+
+        public override void SpawnObject(GameObject go, int dimensionId)
+        {
+            if (!go.TryGetComponent(out NetworkIdentity identity))
+                return;
+
+            //identity.SetDimensionId(dimensionId);
+            NetworkServer.Spawn(go);
         }
 
         public override void Initialize()
@@ -152,28 +186,34 @@ namespace MapForge
                 {
                     string doorName = door.gameObject.name;
 
-                    if (doorName.StartsWith("EZ"))
+                    if (doorName.StartsWith("EZ Breakable"))
                     {
                         EzDoor = door;
                     }
-                    else if (doorName.StartsWith("HCZ"))
+                    else if (doorName.StartsWith("HCZ Brekable"))
                     {
                         HczDoor = door;
                     }
-                    else if (doorName.StartsWith("LCZ"))
+                    else if (doorName.StartsWith("LCZ Breakable"))
                     {
                         LczDoor = door;
+                    }
+                    else if (doorName.StartsWith("HCZ Bulk"))
+                    {
+                        BulkDoor = door;
                     }
                 }
             }
         }
 
-        public override void OnSpawnObject(SpawnableInfo info)
+        public override GameObject OnSpawnObject(SpawnableInfo info)
         {
             switch (info)
             {
+                default:
+                    return null;
                 case MapForgeDoor door:
-                    BreakableDoor doorInstance = GetDoorFromType(door.DoorType).CreateNewInstance(door.Position, door.Rotation, door.Scale, info.transform);
+                    BreakableDoor doorInstance = GetDoorFromType(door.DoorType).CreateNewInstance(door.transform);
                     info.SpawnedBy.SubObjects.Add(doorInstance.gameObject);
 
                     doorInstance.TargetState = door.IsOpened;
@@ -184,38 +224,47 @@ namespace MapForge
                         Bypass2176 = door.Bypass2176,
                         RequiredPermissions = door.Permissions.ToKeycardPermission(),
                     };
-
-                    NetworkServer.Spawn(doorInstance.gameObject);
-                    break;
+                    return doorInstance.gameObject;
                 case MapForgeLocker locker:
-                    Locker lockerInstance = GetLockerFromType(locker.LockerType).CreateNewInstance(locker.Position, locker.Rotation, locker.Scale, locker.transform);
+                    Locker lockerInstance = GetLockerFromType(locker.LockerType).CreateNewInstance(locker.transform);
                     info.SpawnedBy.SubObjects.Add(lockerInstance.gameObject);
-
-                    NetworkServer.Spawn(lockerInstance.gameObject);
-                    break;
+                    return lockerInstance.gameObject;
+                case MapForgeAsset asset:
+                    GameObject assetInstance = GetAssetFromType(asset.AssetType).CreateNewInstance(asset.transform);
+                    info.SpawnedBy.SubObjects.Add(asset.gameObject);
+                    return assetInstance;
                 case MapForgePickup pickup:
                     ItemType item = pickup.Item.ToItemType();
-
-                    ItemPickupBase pickupInstance = item.ToPickup(pickup.Position, pickup.Rotation, pickup.Scale, info.transform);
+                    ItemPickupBase pickupInstance = item.ToPickup(info.transform);
                     info.SpawnedBy.SubObjects.Add(pickupInstance.gameObject);
+
+                    pickup.ItemSerial = pickupInstance.Info.Serial;
+                    MapForgePickup.Interactables.Add(pickupInstance.Info.Serial, pickup);
 
                     if (pickup.IsLocked)
                         pickupInstance.Lock();
 
-                    NetworkServer.Spawn(pickupInstance.gameObject);
-                    break;
+                    return pickupInstance.gameObject;
                 case MapForgePrimitive primitive:
-                    PrimitiveObjectToy primitiveInstance = PrimitiveObject.CreateNewInstance(primitive.Position, primitive.Rotation, primitive.Scale, primitive.transform);
-                    primitiveInstance.NetworkScale = primitiveInstance.transform.CalculateGlobalScale();
+                    PrimitiveObjectToy primitiveInstance = PrimitiveObject.CreateNewInstance(primitive.transform);
+                    primitiveInstance.NetworkScale = primitive.Scale;
+                    primitiveInstance.NetworkPosition = primitive.Position;
+                    primitiveInstance.NetworkRotation = Quaternion.Euler(primitive.Rotation);
 
                     info.SpawnedBy.SubObjects.Add(primitiveInstance.gameObject);
 
+                    // Setup intial values.
+
+                    primitiveInstance.NetworkIsStatic = !primitive.IsAnimated;
+
+                    primitiveInstance.NetworkScale = primitiveInstance.transform.CalculateGlobalScale();
                     primitiveInstance.NetworkMaterialColor = primitive.Color;
                     primitiveInstance.NetworkPrimitiveType = primitive.PrimitiveType.ToPrimitiveType();
 
                     PrimitiveFlags constructFlags = PrimitiveFlags.None.Set(PrimitiveFlags.Visible, primitive.IsVisible).Set(PrimitiveFlags.Collidable, primitive.IsCollidable);
                     primitiveInstance.NetworkPrimitiveFlags = constructFlags;
 
+                    // Listen for changes.
                     primitive.ColorChanged += (Color color) =>
                     {
                         primitiveInstance.NetworkMaterialColor = color;
@@ -236,16 +285,33 @@ namespace MapForge
                         primitiveInstance.NetworkPrimitiveFlags = primitiveInstance.NetworkPrimitiveFlags.Set(PrimitiveFlags.Visible, newVisibility);
                     };
 
-                    NetworkServer.Spawn(primitiveInstance.gameObject);
-                    break;
+                    return primitiveInstance.gameObject;
                 case MapForgeLight light:
-                    LightSourceToy lightInstance = LightObject.CreateNewInstance(light.Position, light.Rotation, light.Scale, light.transform);
+                    LightSourceToy lightInstance = LightObject.CreateNewInstance(light.transform);
+                    lightInstance.NetworkScale = light.Scale;
+                    lightInstance.NetworkPosition = light.Position;
+                    lightInstance.NetworkRotation = Quaternion.Euler(light.Rotation);
+
                     info.SpawnedBy.SubObjects.Add(lightInstance.gameObject);
 
+                    // Setup intial values.
+                    lightInstance.NetworkIsStatic = !light.IsAnimated;
+
+                    lightInstance.NetworkLightType = light.LightType.ToLightType();
                     lightInstance.NetworkLightColor = light.Color;
                     lightInstance.NetworkLightRange = light.Range;
                     lightInstance.NetworkLightIntensity = light.Intensity;
-                    lightInstance.NetworkShadowType = light.Shadows ? LightShadows.Hard : LightShadows.None;
+                    lightInstance.NetworkShadowType = light.ShadowType.ToShadowType();
+                    lightInstance.NetworkShadowStrength = light.ShadowStrength;
+                    lightInstance.NetworkLightShape = light.Shape.ToShapeType();
+                    lightInstance.NetworkSpotAngle = light.SpotAngle;
+                    lightInstance.NetworkInnerSpotAngle = light.InnerSpotAngle;
+
+                    // Listen for changes.
+                    light.LightTypeChanged += (SpawnableLightType type) =>
+                    {
+                        lightInstance.NetworkLightType = type.ToLightType();
+                    };
 
                     light.ColorChanged += (Color color) =>
                     {
@@ -262,13 +328,32 @@ namespace MapForge
                         lightInstance.NetworkLightIntensity = intensity;
                     };
 
-                    light.ShadowsChanged += (bool shadows) =>
+                    light.ShadowTypeChanged += (LightShadowType type) =>
                     {
-                        lightInstance.NetworkShadowType = light.Shadows ? LightShadows.Hard : LightShadows.None;
+                        lightInstance.NetworkShadowType = type.ToShadowType();
                     };
 
-                    NetworkServer.Spawn(lightInstance.gameObject);
-                    break;
+                    light.ShadowStrengthChanged += (float strength) =>
+                    {
+                        lightInstance.NetworkShadowStrength = strength;
+                    };
+
+                    light.ShapeChanged += (LightShapeType type) =>
+                    {
+                        lightInstance.NetworkLightShape = type.ToShapeType();
+                    };
+
+                    light.SpotAngleChanged += (float angle) =>
+                    {
+                        lightInstance.NetworkSpotAngle = angle;
+                    };
+
+                    light.InnerSpotAngleChanged += (float angle) =>
+                    {
+                        lightInstance.NetworkInnerSpotAngle = angle;
+                    };
+
+                    return lightInstance.gameObject;
             }
         }
     }

@@ -5,29 +5,16 @@ Plugin which allows you to customize SCP: SL map by using spawnable objects whic
 
 # Installation
 <details>
-<summary>NW Plugin API</summary>
+<summary>Lab API</summary>
 
-1. Download latest plugin ``MapForge.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/MapForge-nwapi.dll)
+1. Download latest plugin ``MapForge.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/MapForge-labapi.dll)
 2. Put ``MapForge.dll`` in folder
-  - Windows - ``%appdata%/SCP Secret Laboratory/PluginAPI/plugins/global``
-  - Linux - ``.config/SCP Secret Laboratory/PluginAPI/plugins/global``
-3. Download latest dependency ``MapForgeAPI.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/MapForge.API.dll)
-4. Put ``MapForgeAPI.dll`` in folder
-  - Windows - ``%appdata%/SCP Secret Laboratory/PluginAPI/plugins/global/dependencies``
-  - Linux - ``.config/SCP Secret Laboratory/PluginAPI/plugins/global/dependencies``
-5. Launch SCP: SL server.
-</details>
-<details>
-<summary>Exiled</summary>
-
-1. Download latest plugin ``MapForge.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/MapForge-exiled.dll)
-2. Put ``MapForge.dll`` in folder
-  - Windows - ``%appdata%/EXILED/Plugins``
-  - Linux - ``.config/EXILED/Plugins``
-3. Download latest dependency ``MapForgeAPI.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/MapForge.API.dll)
-4. Put ``MapForgeAPI.dll`` in folder
-  - Windows - ``%appdata%/EXILED/Plugins/dependencies``
-  - Linux - ``.config/EXILED/Plugins/dependencies``
+  - Windows - ``%appdata%/SCP Secret Laboratory/LabAPI-Beta/plugins``
+  - Linux - ``.config/SCP Secret Laboratory/LabAPI-Beta/plugins``
+3. Download latest dependencies ``MapForgeAPI.dll``, ``0Harmony.dll`` [Download](https://github.com/Killers0992/MapForge/releases/latest/download/dependencies.zip)
+4. Extract ``dependencies.zip`` and put ``MapForgeAPI.dll`` and ``0Harmony.dll`` in folder
+  - Windows - ``%appdata%/SCP Secret Laboratory/LabAPI-Beta/dependencies``
+  - Linux - ``.config/SCP Secret Laboratory/LabAPI-Beta/dependencies``
 5. Launch SCP: SL server.
 </details>
 
