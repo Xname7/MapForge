@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MapForge.API.Spawnables;
 using UnityEngine;
@@ -115,9 +115,7 @@ namespace MapForge.API.Models
 
             Object.transform.localScale = Scale;
 
-            Spawnables = Object.GetComponentsInChildren<SpawnableInfo>();
-
-            foreach (SpawnableInfo spawnable in Spawnables)
+            foreach (SpawnableInfo spawnable in Object.GetComponentsInChildren<SpawnableInfo>())
             {
                 spawnable.Spawn(this);
             }
@@ -150,7 +148,7 @@ namespace MapForge.API.Models
                 return false;
             }
 
-            foreach(GameObject subObject in SubObjects)
+            foreach (GameObject subObject in SubObjects)
             {
                 if (subObject == null)
                     continue;

@@ -1,6 +1,5 @@
 ﻿using MapForge.API.Enums;
 using MapForge.API.Models;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;

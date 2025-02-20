@@ -1,6 +1,5 @@
 ﻿using MapForge.API.Enums;
 using MapForge.API.Spawnables;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -117,7 +116,7 @@ namespace MapForge.API.Misc
 
             Mesh mesh = filter.sharedMesh;
 
-            UnityEngine.Object.DestroyImmediate(obj);
+            Object.DestroyImmediate(obj);
 
             return mesh;
         }

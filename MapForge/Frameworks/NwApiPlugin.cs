@@ -1,6 +1,6 @@
 ﻿#if NWAPI
-using PluginAPI.Core.Attributes;
 using PluginAPI.Core;
+using PluginAPI.Core.Attributes;
 using PluginAPI.Events;
 
 namespace MapForge.Frameworks
@@ -14,7 +14,7 @@ namespace MapForge.Frameworks
 
         [PluginEntryPoint(BuildSettings.PluginName, BuildSettings.Version, "Plugin made for transforming SCP: SL map.", BuildSettings.Author)]
         void InitializeNWAPI()
-        {            
+        {
             Handler = PluginHandler.Get(this);
             EventManager.RegisterEvents(this);
 

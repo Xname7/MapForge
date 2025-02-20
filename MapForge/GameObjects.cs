@@ -1,5 +1,4 @@
-﻿using AdminToys;
-//using Dimensions;
+using AdminToys;
 using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Pickups;
@@ -113,7 +112,7 @@ namespace MapForge
         public override void Initialize()
         {
             base.Initialize();
-            foreach(var spawnable in NetworkClient.prefabs.Values)
+            foreach (var spawnable in NetworkClient.prefabs.Values)
             {
                 if (spawnable.TryGetComponent(out AdminToyBase toy))
                 {
@@ -236,7 +235,6 @@ namespace MapForge
                     return assetInstance;
                 case MapForgePickup pickup:
                     ItemType item = pickup.Item.ToItemType();
-                    
                     ItemPickupBase pickupInstance = item.ToPickup(info.transform);
                     info.SpawnedBy.SubObjects.Add(pickupInstance.gameObject);
 

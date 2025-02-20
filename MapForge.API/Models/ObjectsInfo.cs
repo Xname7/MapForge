@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace MapForge.API.Models
+
 {
     public class ObjectsInfo
     {
         public bool IsInitialized { get; private set; }
 
-        public virtual void Initialize() 
+        public virtual void Initialize()
         {
             if (IsInitialized)
                 return;

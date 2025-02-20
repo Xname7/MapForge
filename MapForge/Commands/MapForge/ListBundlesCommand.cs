@@ -18,12 +18,12 @@ namespace MapForge.Commands.MapForge
             string[] bundleNames = MapForgeAPI.GetAvailableBundles();
 
             StringBuilder sb = new StringBuilder();
-            
+
             if (bundleNames.Length == 0)
             {
                 sb.AppendLine("Theres no bundles in bundle directory!");
             }
-            else 
+            else
             {
                 sb.AppendLine($"Bundles:");
 

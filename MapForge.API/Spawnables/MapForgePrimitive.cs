@@ -14,8 +14,12 @@ namespace MapForge.API.Spawnables
 
         internal static MapForgePrimitive Create(SpawnablePrimitiveType type, Transform parent)
         {
-            GameObject go = new GameObject($"{type} Primitive");
+            GameObject go = new GameObject(type.ToString());
+
             go.transform.parent = parent;
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.localScale = Vector3.one;
 
             MapForgePrimitive primitive = go.AddComponent<MapForgePrimitive>();
             primitive.PrimitiveType = type;

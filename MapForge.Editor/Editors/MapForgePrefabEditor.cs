@@ -18,7 +18,7 @@ namespace MapForge.API.Editors
         private Vector2 _prefabsScroll = Vector2.zero;
 
         public MapForgePrefab Base => this.target as MapForgePrefab;
-        
+
         public GameObject Prefab
         {
             get
@@ -72,7 +72,7 @@ namespace MapForge.API.Editors
         {
             RefreshAssetBundleList();
 
-            foreach(SpawnableInfo info in Base.GetComponentsInChildren<SpawnableInfo>(true))
+            foreach (SpawnableInfo info in Base.GetComponentsInChildren<SpawnableInfo>(true))
             {
                 info.InitializeInEditor();
             }

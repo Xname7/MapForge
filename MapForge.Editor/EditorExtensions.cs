@@ -1,10 +1,8 @@
 ﻿using MapForge.API.Enums;
-using MapForge.API.Misc;
 using MapForge.API.Models;
 using MapForge.API.Spawnables;
 using System.IO;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace MapForge.API
@@ -18,10 +16,17 @@ namespace MapForge.API
             if (target == null)
                 return null;
 
-            Transform root = target.transform.root;
+            Transform transform = target.transform;
+            Transform root = transform.root;
+            MapForgePrefab metadata;
 
-            if (!root.TryGetComponent(out MapForgePrefab metadata))
-                return null;
+            while (!transform.TryGetComponent(out metadata) && transform != root)
+            {
+                if (transform.parent == null)
+                    return null;
+
+                transform = transform.parent;
+            }
 
             return metadata;
         }

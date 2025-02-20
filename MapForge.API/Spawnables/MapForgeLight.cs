@@ -20,7 +20,11 @@ namespace MapForge.API.Spawnables
         internal static MapForgeLight Create(SpawnableLightType type, Transform parent)
         {
             GameObject go = new GameObject($"{type} Light");
+
             go.transform.parent = parent;
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.localScale = Vector3.one;
 
             MapForgeLight primitive = go.AddComponent<MapForgeLight>();
             primitive.LightType = type;
