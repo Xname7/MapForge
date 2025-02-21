@@ -1,58 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
         <OutputType>Library</OutputType>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <Configurations>Debug;Release;EDITOR;NWAPI;EXILED;LABAPI</Configurations>
+		<LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <Configurations>Debug;Release;EDITOR;LABAPI</Configurations>
     </PropertyGroup>
 
-	<PropertyGroup Condition=" '$(Configuration)' == 'EXILED'">
-		<AssemblyName>MapForge-exiled</AssemblyName>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition=" '$(Configuration)' == 'NWAPI'">
-		<AssemblyName>MapForge-nwapi</AssemblyName>
-	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MapForge.API\MapForge.API.csproj" />
+	</ItemGroup>
 
-	<PropertyGroup Condition=" '$(Configuration)' == 'LABAPI'">
-		<AssemblyName>MapForge-labapi</AssemblyName>
-	</PropertyGroup>
-	
-    <ItemGroup>
-        <Reference Include="Assembly-CSharp" Condition="'$(Configuration)' != 'EXILED'">
-            <HintPath>$(PLUGINAPI_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="CommandSystem.Core">
-            <HintPath>$(SL_REFERENCES)\CommandSystem.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="LabApi" Condition="'$(Configuration)' == 'LABAPI'">
-          <HintPath>$(SL_REFERENCES)\LabApi.dll</HintPath>
-        </Reference>
-        <Reference Include="Mirror">
-            <HintPath>$(SL_REFERENCES)\Mirror-Publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="PluginAPI" Condition="'$(Configuration)' == 'NWAPI'">
-            <HintPath>$(SL_REFERENCES)\PluginAPI.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AssetBundleModule">
-            <HintPath>$(SL_REFERENCES)\UnityEngine.AssetBundleModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-            <HintPath>$(SL_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-	
-    <ItemGroup>
-        <PackageReference Include="ExMod.Exiled" Version="9.0.0-alpha.1" Condition="'$(Configuration)' == 'EXILED'"/>
-        <PackageReference Include="Lib.Harmony" Version="2.3.3" />
-    </ItemGroup>
+	<ItemGroup Label="External Dependencies">
+		<Reference Include="Harmony" HintPath="$(POLSPOL_REFERENCES)\external\0Harmony.dll" />
+	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
-		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;C:\Users\Kille\AppData\Roaming\SCP Secret Laboratory\PluginAPI\plugins\7777&quot;" />
+	<ItemGroup Label="Scpsl Dependencies">
+		<Reference Include="System" HintPath="$(POLSPOL_REFERENCES)\scpsl\System.dll" />
+		<Reference Include="Pooling" HintPath="$(POLSPOL_REFERENCES)\scpsl\Pooling.dll" />
+		<Reference Include="mscorlib" HintPath="$(POLSPOL_REFERENCES)\scpsl\mscorlib.dll" />
+		<Reference Include="NetStandard" HintPath="$(POLSPOL_REFERENCES)\scpsl\netstandard.dll" />
+		<Reference Include="LabAPI" HintPath="$(POLSPOL_REFERENCES)\scpsl\LabApi-Publicized.dll" />
+		<Reference Include="Mirror" HintPath="$(POLSPOL_REFERENCES)\scpsl\Mirror-Publicized.dll" />
+		<Reference Include="NorthwoodLib" HintPath="$(POLSPOL_REFERENCES)\scpsl\NorthwoodLib.dll" />
+		<Reference Include="System.Net.Http" HintPath="$(POLSPOL_REFERENCES)\scpsl\System.Net.Http.dll" />
+		<Reference Include="Unity.TextMeshPro" HintPath="$(POLSPOL_REFERENCES)\scpsl\Unity.TextMeshPro.dll" />
+		<Reference Include="CommandSystem.Core" HintPath="$(POLSPOL_REFERENCES)\scpsl\CommandSystem.Core.dll" />
+		<Reference Include="Assembly-CSharp" HintPath="$(POLSPOL_REFERENCES)\scpsl\Assembly-CSharp-Publicized.dll" />
+		<Reference Include="UnityEngine.CoreModule" HintPath="$(POLSPOL_REFERENCES)\scpsl\UnityEngine.CoreModule.dll" />
+		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(POLSPOL_REFERENCES)\scpsl\UnityEngine.PhysicsModule.dll" />
+		<Reference Include="Assembly-CSharp-firstpass" HintPath="$(POLSPOL_REFERENCES)\scpsl\Assembly-CSharp-firstpass.dll" />
+		<Reference Include="UnityEngine.AssetBundleModule" HintPath="$(POLSPOL_REFERENCES)\scpsl\UnityEngine.AssetBundleModule.dll" />
+	</ItemGroup>
+
+	<Target Name="Copy to build" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(POLSPOL_BUILD)\scpsl\shared\&quot;" />
+		<Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(POLSPOL_BUILD)\scpsl\shared\&quot;" />
 	</Target>
 
-	<ItemGroup>
-        <ProjectReference Include="..\MapForge.API\MapForge.API.csproj" />
-    </ItemGroup>
+	<Target Name="Update internal dependencies" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(POLSPOL_REFERENCES)\internal\&quot;" />
+		<Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(POLSPOL_REFERENCES)\internal\&quot;" />
+	</Target>
 </Project>
