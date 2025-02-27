@@ -8,8 +8,7 @@ env:
   PROJECT_NAME: "/MapForge"
   API_PROJECT_NAME: "/MapForge.API"
   EDITOR_PROJECT_NAME: "/MapForge.Editor"
-  NWAPI_ASESEMBLY_NAME: "MapForge-nwapi"
-  EXILED_ASESEMBLY_NAME: "MapForge-exiled"
+  LABAPI_ASESEMBLY_NAME: "MapForge-labapi"
   SL_REFERENCES: "${{ github.workspace }}/References"
   UNITY_REFERENCES: "${{ github.workspace }}/References"
 
@@ -37,7 +36,7 @@ jobs:
     - name: Download SCP SL References
       uses: killers0992/scpsl.downloadfiles@master
       with:
-        branch: 'early-server-build'
+        branch: 'labapi-beta'
         filesToDownload: ${{ env.gameAssemblyReferences }}
         
     - name: Publicize Assemblies
@@ -52,34 +51,21 @@ jobs:
         
     - name: Build API
       run: dotnet build ${{ github.workspace }}${{ env.API_PROJECT_NAME }}/MapForge.API.csproj --configuration Release
-
-    - name: Upload NWAPI
-      uses: actions/upload-artifact@v3
-      with:
-        name: MapForge
-        path: ${{ github.workspace }}${{ env.API_PROJECT_NAME }}/bin/Release/${{ env.NET_FRAMEWORK_VERSION }}/MapForge.API.dll
-        
-    - name: Build NWAPI
-      run: dotnet build ${{ github.workspace }}${{ env.PROJECT_NAME }}/MapForge.csproj --configuration NWAPI
       
-    - name: Upload NWAPI
-      uses: actions/upload-artifact@v3
-      with:
-        name: MapForge
-        path: ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/NWAPI/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.NWAPI_ASESEMBLY_NAME }}.dll
-
-    - name: Build EXILED
-      run: dotnet build ${{ github.workspace }}${{ env.PROJECT_NAME }}/MapForge.csproj --configuration EXILED
-      
-    - name: Upload EXILED
-      uses: actions/upload-artifact@v3
-      with:
-        name: MapForge
-        path: ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/EXILED/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.EXILED_ASESEMBLY_NAME }}.dll
+    - name: Build LABAPI
+      run: dotnet build ${{ github.workspace }}${{ env.PROJECT_NAME }}/MapForge.csproj --configuration LABAPI
 
     - name: Build Editor
       run: dotnet build ${{ github.workspace }}${{ env.EDITOR_PROJECT_NAME }}/MapForge.Editor.csproj --configuration Release
 
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: MapForge
+        path: |
+          ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/LABAPI/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.LABAPI_ASESEMBLY_NAME }}.dll
+          ${{ github.workspace }}${{ env.API_PROJECT_NAME }}/bin/Release/${{ env.NET_FRAMEWORK_VERSION }}/MapForge.API.dll
+          
     - run: |
         cd ${{ github.workspace }}
         find Packages -name \*.meta >> metaList
@@ -101,13 +87,17 @@ jobs:
         tag_prefix: ""
         custom_tag: "${{ env.version }}"
         
+    - uses: vimtor/action-zip@v1.2
+      with:
+        files: ${{ env.API_PROJECT_NAME }}/bin/Release/${{ env.NET_FRAMEWORK_VERSION }}/MapForge.API.dll ${{ env.PROJECT_NAME }}/bin/LABAPI/${{ env.NET_FRAMEWORK_VERSION }}/0Harmony.dll
+        dest: dependencies.zip
+
     - name: Make Release
       uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
       with:
         files: |
-          ${{ github.workspace }}${{ env.API_PROJECT_NAME }}/bin/Release/${{ env.NET_FRAMEWORK_VERSION }}/MapForge.API.dll
-          ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/NWAPI/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.NWAPI_ASESEMBLY_NAME }}.dll
-          ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/EXILED/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.EXILED_ASESEMBLY_NAME }}.dll
+          ${{ github.workspace }}/dependencies.zip
+          ${{ github.workspace }}${{ env.PROJECT_NAME }}/bin/LABAPI/${{ env.NET_FRAMEWORK_VERSION }}/${{ env.LABAPI_ASESEMBLY_NAME }}.dll
           ${{ github.workspace }}/PackageOutput/com.killers0992.mapforge.unitypackage
           ${{ github.workspace }}/releaseInfo.json
         tag_name: ${{ env.version }}
