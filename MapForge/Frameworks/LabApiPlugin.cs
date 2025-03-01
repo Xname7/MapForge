@@ -4,6 +4,7 @@ using System.IO;
 using LabApi.Events.Handlers;
 using LabApi.Loader.Features.Paths;
 using LabApi.Loader.Features.Plugins;
+using LabApi.Loader.Features.Plugins.Enums;
 using MapForge.API;
 
 namespace MapForge.Frameworks
@@ -19,6 +20,8 @@ namespace MapForge.Frameworks
         public override Version Version { get; } = new Version(BuildSettings.Version);
 
         public override Version RequiredApiVersion { get; } = new Version(0, 4, 0);
+
+        public override LoadPriority Priority => LoadPriority.Highest;
 
         public override void Disable()
         {
