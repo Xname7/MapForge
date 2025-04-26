@@ -56,9 +56,9 @@ public static class Extensions
     /// </summary>
     /// <param name="flags">The door permissions.</param>
     /// <returns>Door Permissions.</returns>
-    public static KeycardPermissions ToKeycardPermission(this DoorKeycardPermissions permission)
+    public static DoorPermissionFlags ToKeycardPermission(this DoorKeycardPermissions permission)
     {
-        return (KeycardPermissions)permission;
+        return (DoorPermissionFlags)permission;
     }
 
     /// <summary>

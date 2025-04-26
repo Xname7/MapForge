@@ -35,7 +35,7 @@ namespace MapForge.Frameworks
 
         public override void Enable()
         {
-            DirectoryInfo mapForgePath = PathManager.Plugins.CreateSubdirectory("MapForge");
+            DirectoryInfo mapForgePath = new DirectoryInfo(Path.GetDirectoryName(FilePath)).CreateSubdirectory("MapForge");
 
             ServerEvents.WaitingForPlayers += PluginInitializer.InitializeObjects;
 

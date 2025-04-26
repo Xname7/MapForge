@@ -218,7 +218,7 @@ namespace MapForge
 
                     doorInstance.TargetState = door.IsOpened;
 
-                    doorInstance.RequiredPermissions = new DoorPermissions()
+                    doorInstance.RequiredPermissions = new DoorPermissionsPolicy()
                     {
                         RequireAll = door.RequireAllPermissions,
                         Bypass2176 = door.Bypass2176,
