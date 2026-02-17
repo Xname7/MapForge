@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
 		<PlatformTarget>x64</PlatformTarget>
         <OutputType>Library</OutputType>
 		<LangVersion>latest</LangVersion>
+		<DebugType>embedded</DebugType>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Configurations>Debug;Release;EDITOR;LABAPI</Configurations>
 	</PropertyGroup>
@@ -16,11 +18,10 @@
 
 	<Target Name="Copy to build" AfterTargets="PostBuildEvent">
 		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(POLSPOL_BUILD)\scpsl\shared\dependencies\&quot;" />
-		<Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(POLSPOL_BUILD)\scpsl\shared\dependencies\&quot;" />
 	</Target>
 
-	<Target Name="Update internal dependencies" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(POLSPOL_REFERENCES)\internal\&quot;" />
-		<Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(POLSPOL_REFERENCES)\internal\&quot;" />
+	<Target Name="Update external dependencies" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(POLSPOL_REFERENCES)\external\&quot;" />
 	</Target>
+	
 </Project>

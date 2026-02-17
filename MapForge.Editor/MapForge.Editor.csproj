@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<PlatformTarget>x64</PlatformTarget>
 		<OutputType>Library</OutputType>
 		<LangVersion>latest</LangVersion>
+		<DebugType>embedded</DebugType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Configurations>Debug;Release;EDITOR;LABAPI</Configurations>
 	</PropertyGroup>
@@ -24,4 +26,5 @@
 		<Reference Include="UnityEngine.AnimationModule" HintPath="$(POLSPOL_REFERENCES)\scpsl\UnityEngine.AnimationModule.dll" />
 		<Reference Include="UnityEngine.AssetBundleModule" HintPath="$(POLSPOL_REFERENCES)\scpsl\UnityEngine.AssetBundleModule.dll" />
 	</ItemGroup>
+	
 </Project>
